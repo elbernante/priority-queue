@@ -36,13 +36,20 @@ class PriorityQueue(object):
         :params items: key:priority pairs
         """
 
-        # TODO: Heap building for list of tuples
 
-        self.heap = [(v, next(self._count), k) for k, v in items.items()]
+        if isinstance(items, dict):
+            # Items is a dictionary {key: value}
+            self.heap = [(v, next(self._count), k) for k, v in items.items()]
+        else:
+            # Items is list of tuples [(key, value)]
+            self.heap = [(v, next(self._count), k) for k, v in items]
+
         for i, (_, _, k) in  enumerate(self.heap):
             self.item_index[k] = i
 
-        # TODO: Verify equal count for self.heap and self.item_index
+        if len(self.heap) != len(self.item_index):
+            raise ValueError, "Duplicate keys found"
+        
 
         half = (len(self.heap) // 2) - 1
         last_index = len(self.heap) - 1
